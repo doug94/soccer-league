@@ -23,13 +23,13 @@ describe('Teste de integração da rota de Login', function () {
 
   let chaiHttpResponse: Response;
 
-  before(async () => {
+  beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
       .resolves(mockToken as any);
   });
 
-  after(()=>{
+  afterEach(()=>{
     (UserModel.findOne as sinon.SinonStub).restore();
   })
 
