@@ -29,8 +29,8 @@ Users.init({
     type: STRING,
   },
 }, {
-  underscored: true,
   sequelize: db,
+  underscored: true,
   modelName: 'users',
   timestamps: false,
 });
