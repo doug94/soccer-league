@@ -50,19 +50,19 @@ describe('Teste de integração da rota de Login', async function () {
     expect(chaiHttpResponse.body).to.be.deep.equal(mockToken);
   });
 
-  it('Deve retornar um erro com status http 400 caso email não for enviado', async function () {
+  it('Deve retornar um erro com status HTTP 400 caso email não for enviado', async function () {
     chaiHttpResponse = await chai.request(app).post('/login').send({ password: 'secret_user' });
     expect(chaiHttpResponse.status).to.be.equal(400);
     expect(chaiHttpResponse.body).to.be.deep.equal(badRequestMessage);
   });
 
-  it('Deve retornar um erro com status http 400 caso senha não for enviada', async function() {
+  it('Deve retornar um erro com status HTTP 400 caso senha não for enviada', async function() {
     chaiHttpResponse = await chai.request(app).post('/login').send({ email: 'user@user.com' });
     expect(chaiHttpResponse.status).to.be.equal(400);
     expect(chaiHttpResponse.body).to.be.deep.equal(badRequestMessage);
   });
 
-  it('Deve retornar um erro com status http 401 caso email for incorreto', async function () {
+  it('Deve retornar um erro com status HTTP 401 caso email for incorreto', async function () {
     const incomingBodyLogin = {
       email: 'user@gmail.com',
       password: 'secret_user'
@@ -72,7 +72,7 @@ describe('Teste de integração da rota de Login', async function () {
     expect(chaiHttpResponse.body).to.be.deep.equal(unauthorizedMessage);
   });
 
-  it('Deve retornar um erro com status http 401 caso senha for incorreta', async function () {
+  it('Deve retornar um erro com status HTTP 401 caso senha for incorreta', async function () {
     const incomingBodyLogin = {
       email: 'user@user.com',
       password: 'wrong_password'
@@ -80,5 +80,12 @@ describe('Teste de integração da rota de Login', async function () {
     chaiHttpResponse = await chai.request(app).post('/login').send(incomingBodyLogin);
     expect(chaiHttpResponse.status).to.be.equal(401);
     expect(chaiHttpResponse.body).to.be.deep.equal(unauthorizedMessage);
+  });
+
+  it(`Deve retornar a role do usuário ao receber requisição GET na rota 
+  /login/validate com o token do usuário como header de authorization`, async function() {
+    chaiHttpResponse = await chai.request(app).get('/login/validate').set('Authorization', mockToken.token);
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal({ role: 'user' });
   })
 });

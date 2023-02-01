@@ -7,6 +7,11 @@ class UserService {
     const result = await Users.findOne({ where: { email }, raw: true }) as IUser;
     if (result && bcrypt.compareSync(password, result.password)) return result;
   };
+
+  public getUserRole = async (email: string): Promise<string | undefined> => {
+    const result = await Users.findOne({ where: { email }, raw: true }) as IUser;
+    if (result) return result.role;
+  };
 }
 
 export default UserService;
