@@ -16,7 +16,6 @@ const { expect } = chai;
 
 import { mockToken } from './mocks/token';
 import { mockUser } from './mocks/mockUser';
-import incomingBodyLogin from './mocks/incomingBodyLogin';
 
 describe('Teste de integração da rota de Login', async function () {
   /**
@@ -25,6 +24,7 @@ describe('Teste de integração da rota de Login', async function () {
 
   let chaiHttpResponse: Response;
   const badRequestMessage = { message: 'All fields must be filled' };
+  const unauthorizedMessage = { message: 'Incorrect email or password' };
 
   beforeEach(async function () {
     sinon
@@ -41,6 +41,10 @@ describe('Teste de integração da rota de Login', async function () {
   })
 
   it('Deve retornar um token de acesso caso usuário e senha estiverem corretos', async function () {
+    const incomingBodyLogin = {
+      email: 'user@user.com',
+      password: 'secret_user'
+    };
     chaiHttpResponse = await chai.request(app).post('/login').send(incomingBodyLogin);
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal(mockToken);
@@ -52,9 +56,29 @@ describe('Teste de integração da rota de Login', async function () {
     expect(chaiHttpResponse.body).to.be.deep.equal(badRequestMessage);
   });
 
-  it('Deve returnar um erro com status http 400 caso senha não for enviada', async function() {
+  it('Deve retornar um erro com status http 400 caso senha não for enviada', async function() {
     chaiHttpResponse = await chai.request(app).post('/login').send({ email: 'user@user.com' });
     expect(chaiHttpResponse.status).to.be.equal(400);
     expect(chaiHttpResponse.body).to.be.deep.equal(badRequestMessage);
   });
+
+  it('Deve retornar um erro com status http 401 caso email for incorreto', async function () {
+    const incomingBodyLogin = {
+      email: 'user@gmail.com',
+      password: 'secret_user'
+    };
+    chaiHttpResponse = await chai.request(app).post('/login').send(incomingBodyLogin);
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.deep.equal(unauthorizedMessage);
+  });
+
+  it('Deve retornar um erro com status http 401 caso senha for incorreta', async function () {
+    const incomingBodyLogin = {
+      email: 'user@user.com',
+      password: 'wrong_password'
+    };
+    chaiHttpResponse = await chai.request(app).post('/login').send(incomingBodyLogin);
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.deep.equal(unauthorizedMessage);
+  })
 });

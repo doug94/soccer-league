@@ -12,7 +12,7 @@ class UserController {
         const token = jwt.sign(email, secret);
         return res.status(200).json({ token });
       }
-      return res.sendStatus(403);
+      return res.status(401).json({ message: 'Incorrect email or password' });
     } catch (error) {
       console.error(error);
     }
