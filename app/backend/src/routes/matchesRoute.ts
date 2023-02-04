@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import MatchesController from '../controllers/matchesController';
+import validateToken from '../middlewares/tokenValidation';
 
 const router = Router();
 
@@ -11,5 +12,7 @@ router.get(
   matchesController.retrieveInProgressMatches,
   matchesController.retrieveFinishedMatches,
 );
+
+router.post('/', validateToken, matchesController.saveMatch);
 
 export default router;

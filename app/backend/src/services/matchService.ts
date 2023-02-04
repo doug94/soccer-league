@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import IMatch from '../interfaces/IMatch';
+import IMatch, { IMatchDb } from '../interfaces/IMatch';
 import Matches from '../database/models/MatchesModel';
 import Teams from '../database/models/TeamsModel';
 
@@ -42,6 +42,11 @@ class MatchService {
       where: { inProgress: false },
     });
     return query as unknown as IMatch[];
+  };
+
+  public insertMatch = async (match: IMatchDb): Promise<IMatchDb> => {
+    await Matches.create({ ...match, inProgress: true });
+    return Matches.findOne({ where: { ...match } }) as unknown as IMatch;
   };
 }
 

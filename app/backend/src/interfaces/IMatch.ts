@@ -6,7 +6,7 @@ export interface IMatchDb {
   homeTeamGoals: number,
   awayTeamId: number,
   awayTeamGoals: number,
-  inProgress: boolean,
+  inProgress?: boolean,
 }
 
 export default interface IMatch extends IMatchDb {
