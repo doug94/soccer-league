@@ -29,6 +29,11 @@ class MatchesController {
     const newMatch = await new MatchService().insertMatch(incomingMatch);
     return res.status(201).json(newMatch);
   };
+
+  public finishMatch = async (req: Request, res: Response) => {
+    await new MatchService().finishMatch(Number(req.params.id));
+    return res.status(200).json({ message: 'Finished' });
+  };
 }
 
 export default MatchesController;

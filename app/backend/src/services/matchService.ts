@@ -48,6 +48,11 @@ class MatchService {
     await Matches.create({ ...match, inProgress: true });
     return Matches.findOne({ where: { ...match } }) as unknown as IMatch;
   };
+
+  public finishMatch = async (id: number) => {
+    const op = await Matches.update({ inProgress: false }, { where: { id } });
+    console.log(op);
+  };
 }
 
 export default MatchService;

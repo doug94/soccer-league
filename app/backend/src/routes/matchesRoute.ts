@@ -15,4 +15,6 @@ router.get(
 
 router.post('/', validateToken, matchesController.saveMatch);
 
+router.patch('/:id/finish', matchesController.finishMatch);
+
 export default router;
