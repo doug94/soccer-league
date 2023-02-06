@@ -39,7 +39,7 @@ class MatchesController {
     const { homeTeamGoals, awayTeamGoals } = req.body;
     const { id } = req.params;
     await new MatchService().updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
-    return res.sendStatus(200);
+    return res.status(200).json({ message: 'Match edited successfully!' });
   };
 }
 
