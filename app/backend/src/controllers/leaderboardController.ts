@@ -6,6 +6,16 @@ class LeaderboardController {
     const leaderboard = await new LeaderboardService().getStatsFromAllTeams();
     return res.status(200).json(leaderboard);
   };
+
+  public getLeaderboardHomeTeams = async (_req: Request, res: Response) => {
+    const leaderboard = await new LeaderboardService().getStatsFromAllTeams('home');
+    return res.status(200).json(leaderboard);
+  };
+
+  public getLeaderboardAwayTeams = async (_req: Request, res: Response) => {
+    const leaderboard = await new LeaderboardService().getStatsFromAllTeams('away');
+    return res.status(200).json(leaderboard);
+  };
 }
 
 export default LeaderboardController;

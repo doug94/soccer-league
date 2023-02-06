@@ -5,10 +5,10 @@ import IMatch from '../interfaces/IMatch';
 import ITeam from '../interfaces/ITeam';
 
 class LeaderboardService {
-  public getStatsFromAllTeams = async (): Promise<ITeamStats[]> => {
+  public getStatsFromAllTeams = async (condition?: string): Promise<ITeamStats[]> => {
     const finishedMatches = await new MatchService().getFinishedMatches();
     const teams = await Teams.findAll();
-    const leaderboard = this.generateLeaderboard(finishedMatches, teams);
+    const leaderboard = this.generateLeaderboard(finishedMatches, teams, condition);
     leaderboard.sort(this.sortLeaderboard);
     return leaderboard;
   };
@@ -27,9 +27,9 @@ class LeaderboardService {
     return 0;
   };
 
-  private generateLeaderboard = (matches: IMatch[], teams: ITeam[]): ITeamStats[] => (
+  private generateLeaderboard = (matches: IMatch[], teams: ITeam[], condition?: string) => (
     teams.map((team) => {
-      const teamMatches = this.getTeamMatches(matches, team);
+      const teamMatches = this.getTeamMatches(matches, team, condition);
       const teamStats = {
         name: team.teamName,
         totalPoints: this.sumAll(this.getTeamPoints(teamMatches, team)),
@@ -90,10 +90,16 @@ class LeaderboardService {
     return points;
   };
 
-  private getTeamMatches = (matches: IMatch[], team: ITeam): IMatch[] => (
-    matches.filter((match) => (
-      match.awayTeam.teamName === team.teamName || match.homeTeam.teamName === team.teamName))
-  );
+  private getTeamMatches = (matches: IMatch[], team: ITeam, condition?: string): IMatch[] => {
+    if (!condition) {
+      return matches.filter((match) => (
+        match.awayTeam.teamName === team.teamName || match.homeTeam.teamName === team.teamName
+      ));
+    } if (condition === 'home') {
+      return matches.filter((match) => match.homeTeam.teamName === team.teamName);
+    }
+    return matches.filter((match) => match.awayTeam.teamName === team.teamName);
+  };
 
   private getTeamGoalsFavor = (matches: IMatch[], team: ITeam): number[] => (
     matches.map((match) => {
