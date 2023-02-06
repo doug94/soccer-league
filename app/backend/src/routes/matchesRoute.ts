@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import MatchesController from '../controllers/matchesController';
 import validateToken from '../middlewares/tokenValidation';
-import validateMatch from '../middlewares/matchValidation';
+import matchValidation from '../middlewares/matchValidation';
 
 const router = Router();
 
 const matchesController = new MatchesController();
+
+const { validateEqualTeams, validateAbsentTeam } = matchValidation;
 
 router.get(
   '/',
@@ -14,7 +16,13 @@ router.get(
   matchesController.retrieveFinishedMatches,
 );
 
-router.post('/', validateToken, validateMatch, matchesController.saveMatch);
+router.post(
+  '/',
+  validateToken,
+  validateEqualTeams,
+  validateAbsentTeam,
+  matchesController.saveMatch,
+);
 
 router.patch('/:id/finish', matchesController.finishMatch);
 

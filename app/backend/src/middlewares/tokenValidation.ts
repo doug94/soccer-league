@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import UserService from '../services/userService';
 
-async function validateToken(req: Request, _res: Response, next: NextFunction) {
+async function validateToken(req: Request, res: Response, next: NextFunction) {
   try {
     const token = req.get('Authorization') as string;
     const secret = process.env.JWT_SECRET as string;
@@ -10,7 +10,7 @@ async function validateToken(req: Request, _res: Response, next: NextFunction) {
     const user = await new UserService().getUserRole(decodedEmail);
     if (user) next();
   } catch (error) {
-    console.error(error);
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
 }
 

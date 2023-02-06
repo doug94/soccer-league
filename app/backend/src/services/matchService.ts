@@ -50,8 +50,7 @@ class MatchService {
   };
 
   public finishMatch = async (id: number) => {
-    const op = await Matches.update({ inProgress: false }, { where: { id } });
-    console.log(op);
+    await Matches.update({ inProgress: false }, { where: { id } });
   };
 }
 
