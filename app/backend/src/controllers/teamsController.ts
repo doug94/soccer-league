@@ -4,8 +4,8 @@ import TeamsService from '../services/teamsService';
 class TeamsController {
   private teamsService: TeamsService;
 
-  public constructor() {
-    this.teamsService = new TeamsService();
+  public constructor(teamsService: TeamsService) {
+    this.teamsService = teamsService;
   }
 
   public retrieveAllTeams = async (_req: Request, res: Response) => {

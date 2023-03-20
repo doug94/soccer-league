@@ -4,8 +4,8 @@ import MatchService from '../services/matchService';
 class MatchesController {
   private matchService: MatchService;
 
-  public constructor() {
-    this.matchService = new MatchService();
+  public constructor(matchService: MatchService) {
+    this.matchService = matchService;
   }
 
   public retrieveAllMatches = async (req: Request, res: Response, next: NextFunction) => {

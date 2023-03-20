@@ -4,8 +4,8 @@ import LeaderboardService from '../services/leaderboardService';
 class LeaderboardController {
   public lbController: LeaderboardService;
 
-  public constructor() {
-    this.lbController = new LeaderboardService();
+  public constructor(leaderboardService: LeaderboardService) {
+    this.lbController = leaderboardService;
   }
 
   public getLeaderboard = async (_req: Request, res: Response) => {

@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import LeaderboardService from '../services/leaderboardService';
 import LeaderboardController from '../controllers/leaderboardController';
 
 const router = Router();
 
-const leaderboardController = new LeaderboardController();
+const leaderboardService = new LeaderboardService();
+
+const leaderboardController = new LeaderboardController(leaderboardService);
 
 router.get('/', leaderboardController.getLeaderboard);
 

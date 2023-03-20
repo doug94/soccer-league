@@ -5,8 +5,8 @@ import UserService from '../services/userService';
 class UserController {
   private userService: UserService;
 
-  public constructor() {
-    this.userService = new UserService();
+  public constructor(userService: UserService) {
+    this.userService = userService;
   }
 
   public login = async (req: Request, res: Response) => {
