@@ -3,10 +3,16 @@ import * as jwt from 'jsonwebtoken';
 import UserService from '../services/userService';
 
 class UserController {
+  private userService: UserService;
+
+  public constructor() {
+    this.userService = new UserService();
+  }
+
   public login = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-      const dbQuery = await new UserService().getUser(email, password);
+      const dbQuery = await this.userService.getUser(email, password);
       if (dbQuery) {
         const secret = process.env.JWT_SECRET as string;
         const token = jwt.sign(email, secret);
